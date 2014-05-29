@@ -1,0 +1,25 @@
+Config { font         = "xft:DejaVu-10"
+       , bgColor      = "#002b36"
+       , fgColor      = "#eee8d5"
+       , border       = NoBorder
+       , position     = Top
+       , lowerOnStart = False
+       , hideOnStart  = False
+       , persistent   = True
+       , commands     = [ Run StdinReader
+                        , Run Battery ["-t", "AC: <acstatus> (<left>%/<timeleft>)"
+                                      , "-L", "15", "-H", "50"
+                                      , "-h", "green", "-n", "yellow","-l", "red"
+                                      , "--"
+                                      , "-O", "<fc=green>On</fc> - "
+                                      , "-i", "" ] 300
+                        , Run Cpu ["-L","3","-H","50","--normal","green","--high","red"] 10
+                        , Run Memory [] 10
+                        , Run Date "%a %b %_d %H:%M" "date" 10
+                        , Run Volume "default" "Master" [] 5
+                        , Run Kbd [("us", "US"), ("ru(winkeys)", "RU")]
+                        ]
+       , sepChar      = "%"
+       , alignSep     = "}{"
+       , template     = "%StdinReader% }{ %cpu% | %battery% | %memory% | %default:Master% | %kbd% | %date%"
+       }
