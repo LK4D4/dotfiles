@@ -15,6 +15,10 @@ xmonad:
 vim:
 	ln -s $(CWD)/vimrc.local $(HOME)/.vimrc
 
+zsh:
+	ln -s $(CWD)/zshrc $(HOME)/.zshrc
+	ln -s $(CWD)/git-flow-completion.zsh $(HOME)/.git-flow-completion.zsh
+
 tmux:
 	ln -s $(CWD)/tmux.conf $(HOME)/.tmux.conf
 	ln -s $(CWD)/urlview $(HOME)/.urlview
@@ -47,7 +51,7 @@ st: terminfo tmp
 	test -x $(CWD)/tmp/st || git clone http://git.suckless.org/st $(CWD)/tmp/st
 	cd $(CWD)/tmp/st && git stash && git pull && git stash pop
 	cp $(CWD)/st/config.h $(CWD)/tmp/st
-	cd $(CWD)/tmp/st && git apply $(CWD)/st/st-c-no_bold_colors.patch
+	cd $(CWD)/tmp/st && git apply --ignore-space-change --ignore-whitespace $(CWD)/st/st-c-no_bold_colors.patch
 	$(MAKE) -C $(CWD)/tmp/st clean all
 	test -x $(HOME)/bin/st || ln -s $(CWD)/tmp/st/st $(HOME)/bin/st
 	test -x $(HOME)/.dir_colors || ln -s $(CWD)/dircolors.256dark $(HOME)/.dir_colors
