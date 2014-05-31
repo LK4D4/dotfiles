@@ -98,6 +98,7 @@ let g:jedi#use_tabs_not_buffers = 0
 let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
 
 let g:go_disable_autoinstall = 1
+let g:go_bin_path = "~/bin"
 au FileType go nmap <Leader>ds <Plug>(go-def-split)
 au FileType go nmap <Leader>i <Plug>(go-info)
 au FileType go nmap gd <Plug>(go-def)
