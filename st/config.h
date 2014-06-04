@@ -10,8 +10,9 @@ static int borderpx = 2;
 static char shell[] = "/bin/zsh";
 
 /* Kerning / character bounding-box mutlipliers */
-float cwscale = 1.0;
-float chscale = 1.0;
+static float cwscale = 1.0;
+static float chscale = 1.0;
+static uint forceselmod = ShiftMask;
 
 /*
  * word delimiter string

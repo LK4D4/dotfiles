@@ -1,14 +1,13 @@
 diff --git a/st.c b/st.c
-index 9733a9b..3c7a22b 100644
+index 11d01df..ca4b422 100644
 --- a/st.c
 +++ b/st.c
-@@ -3004,7 +3004,7 @@ xdraws(char *s, Glyph base, int x, int y, int charlen, int bytelen) {
- 	if(base.mode & ATTR_BOLD) {
- 		if(BETWEEN(base.fg, 0, 7)) {
- 			/* basic system colors */
+@@ -3161,7 +3161,7 @@ xdraws(char *s, Glyph base, int x, int y, int charlen, int bytelen) {
+ 		 * to bright system colors [8-15]
+ 		 */
+ 		if(BETWEEN(base.fg, 0, 7))
 -			fg = &dc.col[base.fg + 8];
 +			fg = &dc.col[base.fg];
- 		} else if(BETWEEN(base.fg, 16, 195)) {
- 			/* 256 colors */
- 			fg = &dc.col[base.fg + 36];
-im
+ 
+ 		if(base.mode & ATTR_ITALIC) {
+ 			font = &dc.ibfont;
