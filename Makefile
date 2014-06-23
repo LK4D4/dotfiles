@@ -44,7 +44,8 @@ goinstall: tmp
 	go get -u github.com/kisielk/errcheck
 	go get -u code.google.com/p/rog-go/exp/cmd/godef
 	go get -u github.com/jstemmer/gotags
-	rm -rf $(BINDIR)/oracle $(BINDIR)/goimports $(BINDIR)/golint $(BINDIR)/errcheck $(BINDIR)/gocode $(BINDIR)/godef $(BINDIR)/gotags
+	go get github.com/monochromegane/the_platinum_searcher
+	rm -rf $(BINDIR)/oracle $(BINDIR)/goimports $(BINDIR)/golint $(BINDIR)/errcheck $(BINDIR)/gocode $(BINDIR)/godef $(BINDIR)/gotags $(BINDIR)/pt
 	ln -s $(GOPATH)/bin/oracle $(BINDIR)
 	ln -s $(GOPATH)/bin/goimports $(BINDIR)
 	ln -s $(GOPATH)/bin/golint $(BINDIR)
@@ -52,6 +53,7 @@ goinstall: tmp
 	ln -s $(GOPATH)/bin/gocode $(BINDIR)
 	ln -s $(GOPATH)/bin/godef $(BINDIR)
 	ln -s $(GOPATH)/bin/gotags $(BINDIR)
+	ln -s $(GOPATH)/bin/the_platinum_searcher $(BINDIR)/pt
 
 dircolors:
 	test -x $(HOME)/.dir_colors || ln -s $(CWD)/dircolors.256dark $(HOME)/.dir_colors
