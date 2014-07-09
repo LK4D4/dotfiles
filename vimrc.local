@@ -36,6 +36,7 @@ NeoBundle 'scrooloose/nerdcommenter'
 NeoBundle 'altercation/vim-colors-solarized'
 NeoBundle 'ervandew/supertab'
 NeoBundle 'davidhalter/jedi-vim'
+NeoBundle 'wting/rust.vim'
 
 " Required:
 call neobundle#end()
