@@ -25,6 +25,7 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 " My Bundles here:
 NeoBundle 'Shougo/vimproc', {'build': {'unix': 'make -f make_unix.mak'}}
 NeoBundle 'Shougo/unite.vim'
+NeoBundle 'kien/ctrlp.vim'
 NeoBundle 'fatih/vim-go'
 NeoBundle 'klen/python-mode'
 NeoBundle 'bling/vim-airline'
@@ -80,7 +81,6 @@ if executable('pt')
 endif
 
 nnoremap <space>/ :Unite grep:. -buffer-name=search-buffer<CR>
-nnoremap <silent> <C-p> :<C-u>Unite -auto-resize -buffer-name=files -start-insert buffer file_rec/async:!<CR>
 nnoremap <leader>y :<C-u>Unite -buffer-name=yank history/yank<CR>
 
 set paste
