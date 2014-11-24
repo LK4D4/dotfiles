@@ -36,9 +36,9 @@ tmp:
 	mkdir $(CWD)/tmp
 
 goinstall: tmp
-	go get -u code.google.com/p/go.tools/cmd/godoc
-	go get -u code.google.com/p/go.tools/cmd/oracle
-	go get -u code.google.com/p/go.tools/cmd/goimports
+	go get -u golang.org/x/tools/cmd/godoc
+	go get -u golang.org/x/tools/cmd/oracle
+	go get -u golang.org/x/tools/cmd/goimports
 	go get -u github.com/nsf/gocode
 	go get -u github.com/golang/lint/golint
 	go get -u github.com/kisielk/errcheck
