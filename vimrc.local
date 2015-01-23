@@ -54,7 +54,7 @@ endif
 
 NeoBundleCheck
 
-syntax on
+syntax off
 
 autocmd FileType unite call s:unite_settings()
 
