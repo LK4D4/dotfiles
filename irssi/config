@@ -10,20 +10,30 @@ servers = (
     chatnet = "bitlbee";
     port = "6667";
     autoconnect = "yes";
-  },
+  }
 );
 
 chatnets = {
-bitlbee = { type = "IRC"; };
-Freenode = { type = "IRC"; max_kicks = "1"; max_msgs = "4"; max_whois = "1"; };
+  bitlbee = {
+    type = "IRC";
+    autosendcmd = "/^msg -bitlbee &bitlbee identify ****; wait -bitlbee 2000";
+  };
+  Freenode = {
+    type = "IRC";
+    max_kicks = "1";
+    max_msgs = "4";
+    max_whois = "1";
+    autosendcmd = "/^msg -FreeNode NickServ identify ****; wait -FreeNode 2000";
+  };
 };
 
 channels = (
-  { name = "#docker-dev"; chatnet = "Freenode"; autojoin = "Yes"; }
-  { name = "#libcontainer"; chatnet = "Freenode"; autojoin = "Yes"; }
-  { name = "&bitlbee"; chatnet = "bitlbee"; autojoin = "No"; }
+  { name = "#docker-dev"; chatnet = "Freenode"; autojoin = "Yes"; },
+  { name = "#libcontainer"; chatnet = "Freenode"; autojoin = "Yes"; },
+  { name = "#docker-maintainers"; chatnet = "Freenode"; autojoin = "Yes"; },
+  { name = "#docker-network"; chatnet = "Freenode"; autojoin = "Yes"; },
+  { name = "&bitlbee"; chatnet = "bitlbee"; autojoin = "No"; },
   { name = "&darth.io"; chatnet = "bitlbee"; autojoin = "Yes"; }
-  { name = "&netstream"; chatnet = "bitlbee"; autojoin = "No"; }
 );
 
 aliases = {
@@ -93,5 +103,6 @@ ignores = (
   {
     level = "JOINS PARTS QUITS MODES";
     channels = ( "#libcontainer", "#docker-dev", "&bitlbee", "&netstream" );
-  }
+  },
+  { level = "JOINS PARTS QUITS NICKS"; channels = ( "#docker" ); }
 );
