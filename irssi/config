@@ -31,7 +31,7 @@ channels = (
   { name = "#docker-dev"; chatnet = "Freenode"; autojoin = "Yes"; },
   { name = "#libcontainer"; chatnet = "Freenode"; autojoin = "Yes"; },
   { name = "#docker-maintainers"; chatnet = "Freenode"; autojoin = "Yes"; },
-  { name = "#docker-network"; chatnet = "Freenode"; autojoin = "Yes"; },
+  { name = "#go-nuts"; chatnet = "Freenode"; autojoin = "Yes"; },
   { name = "&bitlbee"; chatnet = "bitlbee"; autojoin = "No"; },
   { name = "&darth.io"; chatnet = "bitlbee"; autojoin = "Yes"; }
 );
@@ -88,7 +88,7 @@ aliases = {
 
 settings = {
   core = {
-    real_name = "Alexandr Morozov";
+    real_name = "Alexander Morozov";
     user_name = "lk4d4";
     nick = "lk4d4";
   };
@@ -102,7 +102,7 @@ settings = {
 ignores = (
   {
     level = "JOINS PARTS QUITS MODES";
-    channels = ( "#libcontainer", "#docker-dev", "&bitlbee", "&netstream" );
+    channels = ( "#libcontainer", "#docker-dev", "&bitlbee", "#go-nuts" );
   },
   { level = "JOINS PARTS QUITS NICKS"; channels = ( "#docker" ); }
 );
