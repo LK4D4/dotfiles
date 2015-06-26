@@ -38,10 +38,10 @@ NeoBundle 'vim-pandoc/vim-pandoc-syntax'
 NeoBundle 'scrooloose/nerdcommenter'
 NeoBundle 'altercation/vim-colors-solarized'
 NeoBundle 'ervandew/supertab'
-NeoBundle 'wting/rust.vim'
 NeoBundle 'jplaut/vim-arduino-ino'
 NeoBundle 'xolox/vim-misc'
 NeoBundle 'xolox/vim-easytags'
+NeoBundle 'rhysd/vim-clang-format'
 
 " Required:
 call neobundle#end()
@@ -145,6 +145,17 @@ au FileType go nmap <Leader>i <Plug>(go-info)
 au FileType go nmap gd <Plug>(go-def)
 au FileType go nmap <Leader>gd <Plug>(go-doc)
 au FileType go nmap <leader>b <Plug>(go-build)
+
+let g:clang_format#code_style = "llvm"
+let g:clang_format#auto_format = 1
+let g:clang_format#detect_style_file = 1
+let g:clang_format#style_options = {
+            \ "IndentWidth" : 8,
+            \ "UseTab" : "Always",
+            \ "AllowShortIfStatementsOnASingleLine" : "false",
+            \ "Standard" : "C++11",
+            \ "IndentCaseLabels" : "false",
+            \ "BreakBeforeBraces" : "Linux"}
 
 set colorcolumn=81
 set ttyfast
