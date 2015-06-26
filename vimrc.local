@@ -38,9 +38,10 @@ NeoBundle 'vim-pandoc/vim-pandoc-syntax'
 NeoBundle 'scrooloose/nerdcommenter'
 NeoBundle 'altercation/vim-colors-solarized'
 NeoBundle 'ervandew/supertab'
-NeoBundle 'davidhalter/jedi-vim'
 NeoBundle 'wting/rust.vim'
 NeoBundle 'jplaut/vim-arduino-ino'
+NeoBundle 'xolox/vim-misc'
+NeoBundle 'xolox/vim-easytags'
 
 " Required:
 call neobundle#end()
@@ -88,12 +89,10 @@ nnoremap <leader>y :<C-u>Unite -buffer-name=yank history/yank<CR>
 
 set paste
 
-set expandtab shiftwidth=4 softtabstop=4 tabstop=4
-set list
+set noexpandtab shiftwidth=4 softtabstop=4 tabstop=4
+set nolist
 set relativenumber
 set listchars=tab:▹\ ,trail:▿
-"autocmd FileType go autocmd BufWritePre <buffer> Fmt
-autocmd FileType go setlocal noexpandtab shiftwidth=4 tabstop=4 softtabstop=4 nolist
 
 "eol:↵,
 set keymap=russian-jcukenwin
@@ -116,18 +115,20 @@ set laststatus=2
 set number
 set cursorline
 set hidden
-"au BufEnter *.hs compiler ghc
-"let g:haddock_browser="/usr/bin/chromium"
-"let g:haddock_browser_callformat="%s file://%s >/dev/null 2>&1 &"
-let haskell_indent_case=4
-let haskell_indent_if=2
 
-let g:airline_theme='solarized'
+let g:ctrlp_cmd = 'CtrlPMixed'
+let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
+
+if !exists('g:airline_symbols')
+	let g:airline_symbols = {}
+endif
+let g:airline_symbols.linenr = '␤ '
+let g:airline_symbols.paste = 'ρ'
 let g:airline_left_sep = '»'
 let g:airline_right_sep = '«'
-let g:airline_linecolumn_prefix = '␤ '
-let g:airline_paste_symbol = 'ρ'
-let g:airline_enable_syntastic=0
+let g:airline_theme='solarized'
+let g:airline#extensions#syntastic#enabled = 0
+
 let g:pymode_lint_cwindow = 0
 let g:pymode_folding = 0
 let g:pymode_lint_checker = "pylint,pep8,pyflakes"
@@ -135,9 +136,6 @@ let g:pymode_lint_minheight = 10
 let g:pymode_lint_maxheight = 12
 let g:pymode_breakpoint = 0
 let g:pymode_rope = 0
-let g:ctrlp_cmd = 'CtrlPMixed'
-let g:jedi#use_tabs_not_buffers = 0
-let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
 
 let g:go_disable_autoinstall = 1
 let g:go_bin_path = "~/bin"
@@ -147,8 +145,6 @@ au FileType go nmap <Leader>i <Plug>(go-info)
 au FileType go nmap gd <Plug>(go-def)
 au FileType go nmap <Leader>gd <Plug>(go-doc)
 au FileType go nmap <leader>b <Plug>(go-build)
-
-"autocmd BufWritePre *.py :%s/\s\+$//e
 
 set colorcolumn=81
 set ttyfast
@@ -164,10 +160,6 @@ set pastetoggle=<F2>
 set invpaste
 set mouse=a
 
-nnoremap bt :bnext<CR>
-nnoremap br :bprev<CR>
-nnoremap gr :tabprev<CR>
-nnoremap <leader>n :NERDTreeToggle<CR>
 nnoremap <leader>w :PyLintWindowToggle<CR>
 nnoremap <F3> :cnext<CR>
 nnoremap <S-F3> :cprev<CR>
@@ -176,7 +168,6 @@ nnoremap S :exec "normal a".nr2char(getchar())."\e"<CR>
 nnoremap <F5> :set paste<CR>m`o<Esc>``:set nopaste<CR>
 nnoremap <F6> :set paste<CR>m`O<Esc>``:set nopaste<CR>
 nnoremap <F8> :TagbarToggle<CR>
-nnoremap <leader>j !python -m json.tool<CR>
 
 "disable arrows
 inoremap  <Up>     <NOP>
