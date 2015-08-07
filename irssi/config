@@ -31,6 +31,7 @@ channels = (
   { name = "#docker-dev"; chatnet = "Freenode"; autojoin = "Yes"; },
   { name = "#libcontainer"; chatnet = "Freenode"; autojoin = "Yes"; },
   { name = "#docker-maintainers"; chatnet = "Freenode"; autojoin = "Yes"; },
+  { name = "#opencontainers"; chatnet = "Freenode"; autojoin = "Yes"; },
   { name = "#go-nuts"; chatnet = "Freenode"; autojoin = "Yes"; },
   { name = "&bitlbee"; chatnet = "bitlbee"; autojoin = "No"; },
   { name = "&darth.io"; chatnet = "bitlbee"; autojoin = "Yes"; }
