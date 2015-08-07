@@ -4,6 +4,7 @@ servers = (
     chatnet = "Freenode";
     port = "6667";
     autoconnect = "yes";
+	password = "****";
   },
   {
     address = "localhost";
@@ -23,7 +24,6 @@ chatnets = {
     max_kicks = "1";
     max_msgs = "4";
     max_whois = "1";
-    autosendcmd = "/^msg -FreeNode NickServ identify ****; wait -FreeNode 2000";
   };
 };
 
