@@ -4,7 +4,7 @@ servers = (
     chatnet = "Freenode";
     port = "6667";
     autoconnect = "yes";
-	password = "****";
+    password = "****";
   },
   {
     address = "localhost";
