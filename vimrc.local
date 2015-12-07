@@ -25,7 +25,8 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 " My Bundles here:
 NeoBundle 'Shougo/vimproc', {'build': {'unix': 'make -f make_unix.mak'}}
 NeoBundle 'Shougo/unite.vim'
-NeoBundle 'kien/ctrlp.vim'
+NeoBundle 'Shougo/neoyank.vim'
+NeoBundle 'ctrlpvim/ctrlp.vim'
 NeoBundle 'fatih/vim-go'
 NeoBundle 'klen/python-mode'
 NeoBundle 'bling/vim-airline'
@@ -42,6 +43,7 @@ NeoBundle 'jplaut/vim-arduino-ino'
 NeoBundle 'xolox/vim-misc'
 NeoBundle 'xolox/vim-easytags'
 NeoBundle 'rhysd/vim-clang-format'
+NeoBundle 'rust-lang/rust.vim'
 
 " Required:
 call neobundle#end()
@@ -68,21 +70,21 @@ function! s:unite_settings()
   imap <buffer> <C-k>   <Plug>(unite_select_previous_line)
   imap <silent><buffer><expr> <C-x> unite#do_action('split')
   imap <silent><buffer><expr> <C-v> unite#do_action('vsplit')
-  imap <silent><buffer><expr> <C-t> unite#do_action('tabopen')
-
   nmap <buffer> <ESC> <Plug>(unite_exit)
 endfunction
 
 call unite#filters#matcher_default#use(['matcher_fuzzy'])
 call unite#filters#sorter_default#use(['sorter_rank'])
 let g:unite_source_history_yank_enable = 1
-if executable('sift')
-  let g:unite_source_grep_command = 'sift'
-  let g:unite_source_grep_default_opts = '--binary-skip --exclude-dirs=".git" --no-color -n'
+if executable('pt')
+  let g:unite_source_grep_command = 'pt'
+  let g:unite_source_grep_default_opts = '--nogroup --nocolor'
   let g:unite_source_grep_recursive_opt = ''
   let g:unite_source_grep_encoding = 'utf-8'
+  let g:unite_source_rec_async_command = 'pt --nocolor .'
 endif
 
+nnoremap <silent> <C-p> :Unite -start-insert -buffer-name=files -winheight=10 file_rec/async<cr>
 nnoremap <space>/ :Unite grep:. -buffer-name=search-buffer<CR>
 nnoremap <leader>y :<C-u>Unite -buffer-name=yank history/yank<CR>
 
