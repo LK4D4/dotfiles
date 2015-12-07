@@ -118,7 +118,7 @@ set cursorline
 set hidden
 
 let g:ctrlp_cmd = 'CtrlPMixed'
-let g:ctrlp_user_command = 'pt --nocolor --parallell -g=.'
+let g:ctrlp_user_command = 'pt --nocolor --parallel -g=. %s'
 let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
 
 if !exists('g:airline_symbols')
