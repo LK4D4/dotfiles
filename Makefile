@@ -47,7 +47,8 @@ goinstall: tmp
 	go get -u github.com/svent/sift
 	go get -u github.com/LK4D4/gistit
 	go get -u github.com/tools/godep
-	rm -rf $(BINDIR)/oracle $(BINDIR)/goimports $(BINDIR)/golint $(BINDIR)/errcheck $(BINDIR)/gocode $(BINDIR)/godef $(BINDIR)/gotags $(BINDIR)/sift $(BINDIR)/gistit $(BINDIR)/godep
+	go get -u github.com/monochromegane/the_platinum_searcher
+	rm -rf $(BINDIR)/oracle $(BINDIR)/goimports $(BINDIR)/golint $(BINDIR)/errcheck $(BINDIR)/gocode $(BINDIR)/godef $(BINDIR)/gotags $(BINDIR)/sift $(BINDIR)/gistit $(BINDIR)/godep $(BINDIR)/pt
 	ln -s $(GOPATH)/bin/oracle $(BINDIR)
 	ln -s $(GOPATH)/bin/goimports $(BINDIR)
 	ln -s $(GOPATH)/bin/golint $(BINDIR)
@@ -58,6 +59,7 @@ goinstall: tmp
 	ln -s $(GOPATH)/bin/sift $(BINDIR)
 	ln -s $(GOPATH)/bin/gistit $(BINDIR)
 	ln -s $(GOPATH)/bin/godep $(BINDIR)
+	ln -s $(GOPATH)/bin/pt $(BINDIR)/pt
 
 dircolors:
 	test -x $(HOME)/.dir_colors || ln -s $(CWD)/dircolors.256dark $(HOME)/.dir_colors
