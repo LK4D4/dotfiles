@@ -87,9 +87,10 @@ alias mkdir='nocorrect mkdir'
 # Convenient ones
 alias tmux="tmux -u2"
 alias wget="wget --continue --content-disposition"
-alias vim="vim -p"
+alias vim="nvim"
 alias grep="grep --colour"
 alias sift="sift --binary-skip --exclude-dirs=".git" -n"
+alias pt="GOGC=off pt"
 
 function zle-line-init () {
     if (( ${+terminfo[smkx]} )); then
