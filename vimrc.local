@@ -29,10 +29,8 @@ NeoBundle 'Shougo/neoyank.vim'
 NeoBundle 'ctrlpvim/ctrlp.vim'
 NeoBundle 'fatih/vim-go'
 NeoBundle 'klen/python-mode'
-NeoBundle 'bling/vim-airline'
 NeoBundle 'majutsushi/tagbar'
 NeoBundle 'tpope/vim-fugitive'
-NeoBundle 'tpope/vim-surround'
 NeoBundle 'tpope/vim-markdown'
 NeoBundle 'vim-pandoc/vim-pandoc'
 NeoBundle 'vim-pandoc/vim-pandoc-syntax'
@@ -121,16 +119,6 @@ let g:ctrlp_cmd = 'CtrlPMixed'
 let g:ctrlp_user_command = 'pt --nocolor --parallel -g=. %s'
 let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
 
-if !exists('g:airline_symbols')
-	let g:airline_symbols = {}
-endif
-let g:airline_symbols.linenr = '␤ '
-let g:airline_symbols.paste = 'ρ'
-let g:airline_left_sep = '»'
-let g:airline_right_sep = '«'
-let g:airline_theme='solarized'
-let g:airline#extensions#syntastic#enabled = 0
-
 let g:pymode_lint_cwindow = 0
 let g:pymode_folding = 0
 let g:pymode_lint_checker = "pylint,pep8,pyflakes"
@@ -158,6 +146,7 @@ let g:clang_format#style_options = {
             \ "Standard" : "C++11",
             \ "IndentCaseLabels" : "false",
             \ "BreakBeforeBraces" : "Linux"}
+let g:deoplete#enable_at_startup = 1
 
 set colorcolumn=81
 set ttyfast
