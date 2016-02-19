@@ -35,31 +35,22 @@ terminfo:
 tmp:
 	mkdir $(CWD)/tmp
 
+PACKAGES = oracle goimports golint errcheck gocode godef gotags gistit godep pt gorename
+
 goinstall: tmp
 	go get -u golang.org/x/tools/cmd/godoc
 	go get -u golang.org/x/tools/cmd/oracle
 	go get -u golang.org/x/tools/cmd/goimports
+	go get -u golang.org/x/tools/cmd/gorename
 	go get -u github.com/nsf/gocode
 	go get -u github.com/golang/lint/golint
 	go get -u github.com/kisielk/errcheck
 	go get -u github.com/rogpeppe/godef
 	go get -u github.com/jstemmer/gotags
-	go get -u github.com/svent/sift
 	go get -u github.com/LK4D4/gistit
 	go get -u github.com/tools/godep
 	go get -u github.com/monochromegane/the_platinum_searcher
-	rm -rf $(BINDIR)/oracle $(BINDIR)/goimports $(BINDIR)/golint $(BINDIR)/errcheck $(BINDIR)/gocode $(BINDIR)/godef $(BINDIR)/gotags $(BINDIR)/sift $(BINDIR)/gistit $(BINDIR)/godep $(BINDIR)/pt
-	ln -s $(GOPATH)/bin/oracle $(BINDIR)
-	ln -s $(GOPATH)/bin/goimports $(BINDIR)
-	ln -s $(GOPATH)/bin/golint $(BINDIR)
-	ln -s $(GOPATH)/bin/errcheck $(BINDIR)
-	ln -s $(GOPATH)/bin/gocode $(BINDIR)
-	ln -s $(GOPATH)/bin/godef $(BINDIR)
-	ln -s $(GOPATH)/bin/gotags $(BINDIR)
-	ln -s $(GOPATH)/bin/sift $(BINDIR)
-	ln -s $(GOPATH)/bin/gistit $(BINDIR)
-	ln -s $(GOPATH)/bin/godep $(BINDIR)
-	ln -s $(GOPATH)/bin/pt $(BINDIR)/pt
+	$(foreach pkg,$(PACKAGES),rm -rf $(BINDIR)/$(pkg) && ln -s $(GOPATH)/bin/$(pkg) $(BINDIR);)
 
 dircolors:
 	test -x $(HOME)/.dir_colors || ln -s $(CWD)/dircolors.256dark $(HOME)/.dir_colors
