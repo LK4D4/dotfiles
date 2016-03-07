@@ -35,22 +35,20 @@ terminfo:
 tmp:
 	mkdir $(CWD)/tmp
 
-PACKAGES = oracle goimports golint errcheck gocode godef gotags gistit godep pt gorename
+PACKAGES = golang.org/x/tools/cmd/oracle \
+	golang.org/x/tools/cmd/goimports \
+	github.com/golang/lint/golint \
+	github.com/kisielk/errcheck \
+	github.com/nsf/gocode \
+	github.com/rogpeppe/godef \
+	github.com/jstemmer/gotags \
+	github.com/LK4D4/gistit \
+	golang.org/x/tools/cmd/gorename \
+	github.com/monochromegane/the_platinum_searcher/cmd/pt
 
 goinstall: tmp
-	go get -u golang.org/x/tools/cmd/godoc
-	go get -u golang.org/x/tools/cmd/oracle
-	go get -u golang.org/x/tools/cmd/goimports
-	go get -u golang.org/x/tools/cmd/gorename
-	go get -u github.com/nsf/gocode
-	go get -u github.com/golang/lint/golint
-	go get -u github.com/kisielk/errcheck
-	go get -u github.com/rogpeppe/godef
-	go get -u github.com/jstemmer/gotags
-	go get -u github.com/LK4D4/gistit
-	go get -u github.com/tools/godep
-	go get -u github.com/monochromegane/the_platinum_searcher
-	$(foreach pkg,$(PACKAGES),rm -rf $(BINDIR)/$(pkg) && ln -s $(GOPATH)/bin/$(pkg) $(BINDIR);)
+	$(foreach pkg,$(PACKAGES),go get -u $(pkg);)
+	$(foreach pkg,$(notdir $(PACKAGES)),rm -rf $(BINDIR)/$(pkg) && ln -s $(GOPATH)/bin/$(pkg) $(BINDIR)/$(pkg);)
 
 dircolors:
 	test -x $(HOME)/.dir_colors || ln -s $(CWD)/dircolors.256dark $(HOME)/.dir_colors
