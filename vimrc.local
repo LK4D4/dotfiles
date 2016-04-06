@@ -1,90 +1,40 @@
 set nocompatible               " Be iMproved
 
-" NeoBundle check and auto install
-let iCanHazNeoBundle=1
-let NeoBundle_readme=expand('~/.vim/bundle/neobundle.vim/README.md')
-if !filereadable(NeoBundle_readme)
-    echo "Installing NeoBundle.."
-    echo ""
-    silent !mkdir -p ~/.vim/bundle
-    silent !git clone https://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim
-    let iCanHazNeoBundle=0
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall | source $MYVIMRC
 endif
 
-if has('vim_starting')
-  set runtimepath+=~/.vim/bundle/neobundle.vim/
-endif
+call plug#begin('~/.vim/plugged')
 
-" Required:
-call neobundle#begin(expand('~/.vim/bundle'))
+Plug 'altercation/vim-colors-solarized'
 
-" Let NeoBundle manage NeoBundle
-" Required:
-NeoBundleFetch 'Shougo/neobundle.vim'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+Plug 'easymotion/vim-easymotion'
+Plug 'ervandew/supertab'
+Plug 'scrooloose/nerdcommenter'
+Plug 'majutsushi/tagbar'
 
-" My Bundles here:
-NeoBundle 'Shougo/vimproc', {'build': {'unix': 'make -f make_unix.mak'}}
-NeoBundle 'Shougo/unite.vim'
-NeoBundle 'Shougo/neoyank.vim'
-NeoBundle 'ctrlpvim/ctrlp.vim'
-NeoBundle 'fatih/vim-go'
-NeoBundle 'klen/python-mode'
-NeoBundle 'majutsushi/tagbar'
-NeoBundle 'tpope/vim-fugitive'
-NeoBundle 'tpope/vim-markdown'
-NeoBundle 'vim-pandoc/vim-pandoc'
-NeoBundle 'vim-pandoc/vim-pandoc-syntax'
-NeoBundle 'scrooloose/nerdcommenter'
-NeoBundle 'altercation/vim-colors-solarized'
-NeoBundle 'ervandew/supertab'
-NeoBundle 'jplaut/vim-arduino-ino'
-NeoBundle 'xolox/vim-misc'
-NeoBundle 'xolox/vim-easytags'
-NeoBundle 'rhysd/vim-clang-format'
-NeoBundle 'rust-lang/rust.vim'
+Plug 'fatih/vim-go'
+Plug 'rhysd/vim-go-impl'
+Plug 'tpope/vim-markdown'
+Plug 'rust-lang/rust.vim'
 
-" Required:
-call neobundle#end()
+Plug 'tpope/vim-fugitive'
+Plug 'jplaut/vim-arduino-ino'
 
-" Required:
+call plug#end()
+
 filetype plugin indent on
-
-" Installation check.
-if iCanHazNeoBundle == 0
-    echo "Installing Bundles, please ignore key map error messages"
-    echo ""
-    :NeoBundleInstall
-endif
-
-NeoBundleCheck
 
 syntax off
 
-autocmd FileType unite call s:unite_settings()
-
-function! s:unite_settings()
-  let b:SuperTabDisabled=1
-  imap <buffer> <C-j>   <Plug>(unite_select_next_line)
-  imap <buffer> <C-k>   <Plug>(unite_select_previous_line)
-  imap <silent><buffer><expr> <C-x> unite#do_action('split')
-  imap <silent><buffer><expr> <C-v> unite#do_action('vsplit')
-  nmap <buffer> <ESC> <Plug>(unite_exit)
-endfunction
-
-call unite#filters#matcher_default#use(['matcher_fuzzy'])
-call unite#filters#sorter_default#use(['sorter_rank'])
-let g:unite_source_history_yank_enable = 1
-if executable('pt')
-  let g:unite_source_grep_command = 'pt'
-  let g:unite_source_grep_default_opts = '--nogroup --nocolor'
-  let g:unite_source_grep_recursive_opt = ''
-  let g:unite_source_grep_encoding = 'utf-8'
-  let g:unite_source_rec_async_command = 'pt --nocolor -g=.'
-endif
-
-nnoremap <silent> <C-p> :Unite -start-insert -buffer-name=files -winheight=10 file_rec/async<cr>
-nnoremap <space>/ :Unite grep:. -buffer-name=search-buffer<CR>
-nnoremap <leader>y :<C-u>Unite -buffer-name=yank history/yank<CR>
+nmap <Leader>s <Plug>(easymotion-overwin-f2)
+let g:EasyMotion_smartcase = 1
+map <Leader>j <Plug>(easymotion-j)
+map <Leader>k <Plug>(easymotion-k)
 
 set paste
 
@@ -115,38 +65,22 @@ set number
 set cursorline
 set hidden
 
-let g:ctrlp_cmd = 'CtrlPMixed'
-let g:ctrlp_user_command = 'pt --nocolor -g=. %s'
-let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
+set statusline=%F%m%r%h%w\ 
+set statusline+=%=%{fugitive#statusline()}\    
+set statusline+=[%{strlen(&fenc)?&fenc:&enc}]
+set statusline+=\ [line\ %l\/%L]          
 
-let g:pymode_lint_cwindow = 0
-let g:pymode_folding = 0
-let g:pymode_lint_checker = "pylint,pep8,pyflakes"
-let g:pymode_lint_minheight = 10
-let g:pymode_lint_maxheight = 12
-let g:pymode_breakpoint = 0
-let g:pymode_rope = 0
+let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
 
 let g:go_disable_autoinstall = 1
 let g:go_bin_path = "~/bin"
 let g:go_fmt_command = "goimports"
+
 au FileType go nmap <Leader>ds <Plug>(go-def-split)
 au FileType go nmap <Leader>i <Plug>(go-info)
 au FileType go nmap gd <Plug>(go-def)
 au FileType go nmap <Leader>gd <Plug>(go-doc)
 au FileType go nmap <leader>b <Plug>(go-build)
-
-let g:clang_format#code_style = "llvm"
-let g:clang_format#auto_format = 0
-let g:clang_format#detect_style_file = 1
-let g:clang_format#style_options = {
-            \ "IndentWidth" : 8,
-            \ "UseTab" : "Always",
-            \ "AllowShortIfStatementsOnASingleLine" : "false",
-            \ "Standard" : "C++11",
-            \ "IndentCaseLabels" : "false",
-            \ "BreakBeforeBraces" : "Linux"}
-let g:deoplete#enable_at_startup = 1
 
 set colorcolumn=81
 set ttyfast
@@ -155,6 +89,8 @@ set wildmenu
 " Press space to clear search highlighting
 nnoremap <silent> <Space> :noh<CR>
 nnoremap <NL> i<CR><ESC>
+nnoremap <C-p> :Files<CR>
+nnoremap <Space>/ :Ag 
 
 " Map toggling paste mode
 nnoremap <F2> :set invpaste paste?<CR>
@@ -162,9 +98,6 @@ set pastetoggle=<F2>
 set invpaste
 set mouse=a
 
-nnoremap <leader>w :PyLintWindowToggle<CR>
-nnoremap <F3> :cnext<CR>
-nnoremap <S-F3> :cprev<CR>
 nnoremap s :exec "normal i".nr2char(getchar())."\e"<CR>
 nnoremap S :exec "normal a".nr2char(getchar())."\e"<CR>
 nnoremap <F5> :set paste<CR>m`o<Esc>``:set nopaste<CR>
@@ -183,12 +116,6 @@ noremap   <Right>  <NOP>
 
 autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
 autocmd InsertLeave * if pumvisible() == 0|pclose|endif
-
-ab pdb import pdb; pdb.set_trace()
-ab ipdb import ipdb; ipdb.set_trace()
-ab shabang #!/usr/bin/python
-ab utf8 # coding: utf-8
-ab ifmain if __name__ == "__main__":
 
 set background=dark
 if has('gui_running')
