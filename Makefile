@@ -44,7 +44,8 @@ PACKAGES = golang.org/x/tools/cmd/oracle \
 	github.com/jstemmer/gotags \
 	github.com/LK4D4/gistit \
 	golang.org/x/tools/cmd/gorename \
-	github.com/monochromegane/the_platinum_searcher/cmd/pt
+	github.com/monochromegane/the_platinum_searcher/cmd/pt \
+	github.com/josharian/impl
 
 goinstall: tmp
 	$(foreach pkg,$(PACKAGES),go get -u $(pkg);)
