@@ -58,6 +58,7 @@ st: terminfo tmp dircolors
 	rm -rf $(CWD)/tmp/st
 	git clone http://git.suckless.org/st $(CWD)/tmp/st
 	cp $(CWD)/st/config.h $(CWD)/tmp/st
+	cd $(CWD)/tmp/st && git apply --ignore-space-change --ignore-whitespace $(CWD)/st/no_bold.patch
 	$(MAKE) -C $(CWD)/tmp/st clean all
 	test -x $(HOME)/bin/st || ln -s $(CWD)/tmp/st/st $(HOME)/bin/st
 
