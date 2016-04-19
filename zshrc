@@ -163,11 +163,7 @@ bright () {
 
 # Imguring
 imgur() {
-    curl -s -F image=@$1 -F "key=486690f872c678126a2c09a9e196ce1b" http://imgur.com/api/upload.xml | grep -E -o "<original_image>(.)*</original_image>" | grep -E -o "http://i.imgur.com/[^<]*"
-          }
-
-imgur() {
-    curl -s -F "image=@$1" -F "key=486690f872c678126a2c09a9e196ce1b" http://imgur.com/api/upload.xml | grep -E -o "<original_image>(.)*</original_image>" | grep -E -o "http://i.imgur.com/[^<]*"
+	curl -sS -H 'Authorization: Client-ID 9657b96ca0b7f38' -H 'Expect: ' -F "image=@$1" https://api.imgur.com/3/image | jq ".data.link" | sed -e 's/"//g'
 }
 
 # prompt
