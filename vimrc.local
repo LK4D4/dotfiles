@@ -17,8 +17,9 @@ Plug 'ervandew/supertab'
 Plug 'scrooloose/nerdcommenter'
 Plug 'majutsushi/tagbar'
 
-Plug 'fatih/vim-go'
 Plug 'rhysd/vim-go-impl'
+Plug 'nsf/gocode', { 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh' }
+Plug 'dgryski/vim-godef'
 Plug 'tpope/vim-markdown'
 Plug 'rust-lang/rust.vim'
 
@@ -75,6 +76,7 @@ let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
 let g:go_disable_autoinstall = 1
 let g:go_bin_path = "~/bin"
 let g:go_fmt_command = "goimports"
+let g:godef_split=0
 
 au FileType go nmap <Leader>ds <Plug>(go-def-split)
 au FileType go nmap <Leader>i <Plug>(go-info)
