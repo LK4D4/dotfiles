@@ -1,6 +1,5 @@
 # Sourcing so sourcing
 source /usr/bin/virtualenvwrapper.sh
-source $HOME/.git-flow-completion.zsh
 
 export GOROOT=$HOME/go
 export GOARCH=amd64

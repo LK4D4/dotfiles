@@ -15,7 +15,6 @@ vim: goinstall
 
 zsh: dircolors
 	ln -s $(CWD)/zshrc $(HOME)/.zshrc
-	ln -s $(CWD)/git-flow-completion.zsh $(HOME)/.git-flow-completion.zsh
 
 tmux:
 	ln -s $(CWD)/tmux.conf $(HOME)/.tmux.conf
