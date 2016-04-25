@@ -73,16 +73,39 @@ set statusline+=\ [line\ %l\/%L]
 
 let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
 
-let g:go_disable_autoinstall = 1
-let g:go_bin_path = "~/bin"
-let g:go_fmt_command = "goimports"
-let g:godef_split=0
+function s:GoImports()
+    let view = winsaveview()
+    silent execute "%!" . "goimports"
+    if v:shell_error
+        let errors = []
+        for line in getline(1, line('$'))
+            let tokens = matchlist(line, '^\(.\{-}\):\(\d\+\):\(\d\+\)\s*\(.*\)')
+            if !empty(tokens)
+                call add(errors, {"filename": @%,
+                                 \"lnum":     tokens[2],
+                                 \"col":      tokens[3],
+                                 \"text":     tokens[4]})
+            endif
+        endfor
+        if empty(errors)
+            % | " Couldn't detect gofmt error format, output errors
+        endif
+        undo
+        if !empty(errors)
+            call setqflist(errors, 'r')
+			copen
+			cc 1
+        endif
+        echohl Error | echomsg "Goimports returned error" | echohl None
+	else
+		cclose
+    endif
+    call winrestview(view)
+endfunction
 
-au FileType go nmap <Leader>ds <Plug>(go-def-split)
-au FileType go nmap <Leader>i <Plug>(go-info)
-au FileType go nmap gd <Plug>(go-def)
-au FileType go nmap <Leader>gd <Plug>(go-doc)
-au FileType go nmap <leader>b <Plug>(go-build)
+autocmd FileType go autocmd BufWritePre <buffer> call s:GoImports()
+
+let g:godef_split=0
 
 set colorcolumn=81
 set ttyfast
