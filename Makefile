@@ -2,16 +2,9 @@ CWD=$(shell pwd)
 BINDIR=$(HOME)/bin
 export GOPATH=$(CWD)/tmp
 
-all: xmonad vim tmux st
+all: vim tmux st dwm
 
 .IGNORE:
-xmonad:
-	mkdir -p $(HOME)/.xmonad
-	ln -s $(CWD)/xmonad/xmonad.hs $(HOME)/.xmonad/xmonad.hs
-	ln -s $(CWD)/xmonad/xmobarrc $(HOME)/.xmobarrc
-	ln -s $(CWD)/xmonad/xserverrc $(HOME)/.xserverrc
-	ln -s $(CWD)/xmonad/xinitrc $(HOME)/.xinitrc
-
 docker:
 	docker build -t dev .
 
@@ -32,6 +25,10 @@ terminfo:
 	rm -rf $(HOME)/.terminfo
 	ln -s $(CWD)/terminfo $(HOME)/.terminfo
 
+conky: skb
+	rm -rf $(HOME)/.conkyrc
+	ln -s $(CWD)/conkyrc $(HOME)/.conkyrc
+
 tmp:
 	mkdir $(CWD)/tmp
 
@@ -45,7 +42,8 @@ PACKAGES = golang.org/x/tools/cmd/oracle \
 	github.com/LK4D4/gistit \
 	golang.org/x/tools/cmd/gorename \
 	github.com/monochromegane/the_platinum_searcher/cmd/pt \
-	github.com/josharian/impl
+	github.com/josharian/impl \
+	golang.org/x/tools/cmd/guru
 
 goinstall: tmp
 	$(foreach pkg,$(PACKAGES),go get -u $(pkg);)
@@ -59,7 +57,25 @@ st: terminfo tmp dircolors
 	git clone http://git.suckless.org/st $(CWD)/tmp/st
 	cp $(CWD)/st/config.h $(CWD)/tmp/st
 	cd $(CWD)/tmp/st && git apply --ignore-space-change --ignore-whitespace $(CWD)/st/no_bold.patch
-	$(MAKE) -C $(CWD)/tmp/st clean all
-	test -x $(HOME)/bin/st || ln -s $(CWD)/tmp/st/st $(HOME)/bin/st
+	$(MAKE) -C $(CWD)/tmp/st all
+	test -L $(HOME)/bin/st || ln -s $(CWD)/tmp/st/st $(HOME)/bin/st
 
-.PHONY: xmonad vim tmux st terminfo
+dwm: tmp conky
+	rm -rf $(CWD)/tmp/dwm
+	git clone http://git.suckless.org/dwm $(CWD)/tmp/dwm
+	cp $(CWD)/dwm/config.h $(CWD)/tmp/dwm
+	cd $(CWD)/tmp/dwm
+	$(MAKE) -C $(CWD)/tmp/dwm all
+	test -L $(HOME)/bin/dwm || ln -s $(CWD)/tmp/dwm/dwm $(HOME)/bin/dwm
+	test -L $(HOME)/.xserverrc || ln -s $(CWD)/xserverrc $(HOME)/.xserverrc
+	test -L $(HOME)/.xinitrc || ln -s $(CWD)/xinitrc $(HOME)/.xinitrc
+
+skb:
+	rm -rf $(CWD)/tmp/skb
+	git clone https://github.com/polachok/skb.git $(CWD)/tmp/skb
+	cp $(CWD)/skb/config.h $(CWD)/tmp/skb
+	cd $(CWD)/tmp/skb
+	$(MAKE) -C $(CWD)/tmp/skb
+	test -L $(HOME)/bin/skb || ln -s $(CWD)/tmp/skb/skb $(HOME)/bin/skb
+
+.PHONY: st terminfo dwm

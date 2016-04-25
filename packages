@@ -1,6 +1,6 @@
-xmonad
-xmonad-contrib
-xmobar
+dwm
+dmenu
+conky
 tmux
 st
 vim
