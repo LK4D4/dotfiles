@@ -19,7 +19,6 @@ Plug 'majutsushi/tagbar'
 
 Plug 'rhysd/vim-go-impl'
 Plug 'nsf/gocode', { 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh' }
-Plug 'dgryski/vim-godef'
 Plug 'tpope/vim-markdown'
 Plug 'rust-lang/rust.vim'
 
@@ -72,9 +71,19 @@ set statusline+=\ [line\ %l\/%L]
 
 let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
 
+" Go stuff
+
+" gofmt/imports
+let g:gofmt_command = "gofmt"
+let g:goimports_command = "goimports"
+
+if executable(g:goimports_command)
+	let g:gofmt_command = g:goimports_command
+endif
+
 function s:GoImports()
     let view = winsaveview()
-    silent execute "%!" . "goimports"
+    silent execute "%!" . g:gofmt_command
     if v:shell_error
         let errors = []
         for line in getline(1, line('$'))
@@ -103,7 +112,36 @@ endfunction
 
 autocmd FileType go autocmd BufWritePre <buffer> call s:GoImports()
 
-let g:godef_split=0
+" godef
+let g:godef_command = "godef"
+
+function! Godef()
+    let pos = getpos(".")[1:2]
+    if &encoding == 'utf-8'
+        let offs = line2byte(pos[0]) + pos[1] - 2
+    else
+        let c = pos[1]
+        let buf = line('.') == 1 ? "" : (join(getline(1, pos[0] - 1), "\n") . "\n")
+        let buf .= c == 1 ? "" : getline(pos[0])[:c-2]
+        let offs = len(iconv(buf, &encoding, "utf-8"))
+    endif
+    let out=system(g:godef_command . " -f=" . expand("%:p") . " -i " . shellescape("-o=" . offs), join(getbufline(bufnr('%'), 1, '$'), "\n"))
+
+    let old_errorformat = &errorformat
+    let &errorformat = "%f:%l:%c"
+
+    if out =~ 'godef: '
+        let out=substitute(out, '\n$', '', '')
+        echom out
+	else
+        lexpr out
+    end
+    let &errorformat = old_errorformat
+endfunction
+
+autocmd FileType go nnoremap <buffer> gd :call Godef()<cr>
+
+" End Go stuff
 
 set colorcolumn=81
 set ttyfast
