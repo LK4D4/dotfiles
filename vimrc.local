@@ -30,7 +30,7 @@ call plug#end()
 
 filetype plugin indent on
 
-syntax off
+syntax on
 
 nmap <Leader>s <Plug>(easymotion-overwin-f2)
 let g:EasyMotion_smartcase = 1
@@ -48,7 +48,6 @@ set listchars=tab:▹\ ,trail:▿
 set keymap=russian-jcukenwin
 set iminsert=0
 set imsearch=0
-highlight lCursor guifg=NONE guibg=Cyan
 set wildmode=longest,list,full
 set wildmenu
 nmap <leader>l :set list! relativenumber!<CR>
@@ -96,7 +95,6 @@ function s:GoImports()
 			copen
 			cc 1
         endif
-        echohl Error | echomsg "Goimports returned error" | echohl None
 	else
 		cclose
     endif
@@ -143,11 +141,5 @@ autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
 autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 
 set background=dark
-if has('gui_running')
-    set guioptions=a
-    colorscheme solarized
-    set guifont=Terminus\ 10
-else
-    let g:solarized_visibility = "high"
-    colorscheme solarized
-endif
+let g:solarized_visibility = "high"
+colorscheme solarized
