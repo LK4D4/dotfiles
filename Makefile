@@ -31,18 +31,22 @@ conky: skb
 tmp:
 	mkdir $(CWD)/tmp
 
-PACKAGES = golang.org/x/tools/cmd/oracle \
-	golang.org/x/tools/cmd/goimports \
-	github.com/golang/lint/golint \
-	github.com/kisielk/errcheck \
+PACKAGES = golang.org/x/tools/cmd/goimports \
 	github.com/nsf/gocode \
 	github.com/rogpeppe/godef \
-	github.com/jstemmer/gotags \
 	github.com/LK4D4/gistit \
 	golang.org/x/tools/cmd/gorename \
 	github.com/monochromegane/the_platinum_searcher/cmd/pt \
 	github.com/josharian/impl \
-	golang.org/x/tools/cmd/guru
+	golang.org/x/tools/cmd/guru \
+	github.com/gordonklaus/ineffassign \
+	github.com/golang/lint/golint \
+	github.com/kisielk/errcheck \
+	github.com/mdempsky/unconvert \
+	honnef.co/go/staticcheck/cmd/staticcheck \
+	honnef.co/go/unused/cmd/unused \
+	honnef.co/go/simple/cmd/gosimple
+
 
 goinstall: tmp
 	$(foreach pkg,$(PACKAGES),go get -u $(pkg);)
