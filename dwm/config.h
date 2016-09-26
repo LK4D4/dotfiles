@@ -2,20 +2,26 @@
 #include <X11/XF86keysym.h>
 
 /* appearance */
-static const char *fonts[] = {
-	"terminus:size=12"
-};
-static const char dmenufont[]       = "terminus:size=12";
-static const char normbordercolor[] = "#073642";
-static const char normbgcolor[]     = "#002b36";
-static const char normfgcolor[]     = "#839496";
-static const char selbordercolor[]  = "#586e75";
-static const char selbgcolor[]      = "#073642";
-static const char selfgcolor[]      = "#839496";
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
+static const char *fonts[] = { "terminus:size=12" };
+static const char dmenufont[]       = "terminus:size=12";
+
+static const char normfgcolor[]     = "#839496";
+static const char normbgcolor[]     = "#002b36";
+static const char normbordercolor[] = "#073642";
+
+static const char selfgcolor[]      = "#839496";
+static const char selbgcolor[]      = "#073642";
+static const char selbordercolor[]  = "#586e75";
+
+static const char *colors[SchemeLast][3]      = {
+	/*               fg         bg         border   */
+	[SchemeNorm] = { normfgcolor, normbgcolor, normbordercolor },
+	[SchemeSel] =  { selfgcolor, selbgcolor,  selbordercolor  },
+};
 
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
@@ -27,7 +33,8 @@ static const Rule rules[] = {
 	 */
 	/* class      				  instance    title       tags mask     isfloating   monitor */
 	{ "Google-chrome-stable",     NULL,       NULL,       1 << 1,   	        0,           -1 },
-	{ "Skype",		  			  NULL,	      NULL,	  	  1 << 5, 		    1, 		     -1 },
+	{ "Skype",		  			  NULL,	      NULL,	  	  1 << 5, 		        0, 		     -1 },
+	{ "Telegram",	  			  NULL,	      NULL,	  	  1 << 5, 		        0, 		     -1 },
 };
 
 /* layout(s) */
@@ -37,7 +44,6 @@ static const int resizehints = 1;    /* 1 means respect size hints in tiled resi
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	{ "-|=",      ntile },    /* first entry is default */
 	{ "[]=",      tile },    /* first entry is default */
 	{ "><>",      NULL },    /* no layout function means floating behavior */
 	{ "[M]",      monocle },
