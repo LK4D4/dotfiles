@@ -4,21 +4,11 @@ servers = (
     chatnet = "Freenode";
     port = "6667";
     autoconnect = "yes";
-    password = "****";
+    password = "*****";
   },
-  {
-    address = "localhost";
-    chatnet = "bitlbee";
-    port = "6667";
-    autoconnect = "yes";
-  }
 );
 
 chatnets = {
-  bitlbee = {
-    type = "IRC";
-    autosendcmd = "/^msg -bitlbee &bitlbee identify ****; wait -bitlbee 2000";
-  };
   Freenode = {
     type = "IRC";
     max_kicks = "1";
@@ -32,8 +22,6 @@ channels = (
   { name = "#docker-maintainers"; chatnet = "Freenode"; autojoin = "Yes"; },
   { name = "#opencontainers"; chatnet = "Freenode"; autojoin = "Yes"; },
   { name = "#go-nuts"; chatnet = "Freenode"; autojoin = "Yes"; },
-  { name = "&bitlbee"; chatnet = "bitlbee"; autojoin = "No"; },
-  { name = "&darth.io"; chatnet = "bitlbee"; autojoin = "Yes"; }
 );
 
 aliases = {
@@ -102,7 +90,7 @@ settings = {
 ignores = (
   {
     level = "JOINS PARTS QUITS MODES";
-    channels = ( "#libcontainer", "#docker-dev", "&bitlbee", "#go-nuts" );
+    channels = ( "#libcontainer", "#docker-dev", "#go-nuts" );
   },
   { level = "JOINS PARTS QUITS NICKS"; channels = ( "#docker" ); }
 );
