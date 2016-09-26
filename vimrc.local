@@ -15,11 +15,14 @@ Plug 'junegunn/fzf.vim'
 Plug 'easymotion/vim-easymotion'
 Plug 'ervandew/supertab'
 Plug 'scrooloose/nerdcommenter'
-Plug 'majutsushi/tagbar'
+function! DoRemote(arg)
+  UpdateRemotePlugins
+endfunction
+Plug 'Shougo/deoplete.nvim', { 'do': function('DoRemote') }
+Plug 'zchee/deoplete-go', { 'for': 'go', 'do': 'make' }
 
-Plug 'rhysd/vim-go-impl'
-Plug 'nsf/gocode', { 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh' }
-Plug 'tpope/vim-markdown'
+Plug 'fatih/vim-go', { 'for': 'go' }
+Plug 'tpope/vim-markdown', { 'for': 'md' }
 Plug 'rust-lang/rust.vim'
 
 Plug 'tpope/vim-fugitive'
@@ -31,6 +34,8 @@ filetype plugin indent on
 
 syntax on
 
+let mapleader = "\<Space>"
+
 nmap <Leader>s <Plug>(easymotion-overwin-f2)
 let g:EasyMotion_smartcase = 1
 map <Leader>j <Plug>(easymotion-j)
@@ -40,7 +45,6 @@ set paste
 
 set noexpandtab shiftwidth=4 softtabstop=4 tabstop=4
 set nolist
-set relativenumber
 set listchars=tab:▹\ ,trail:▿
 
 "eol:↵,
@@ -49,8 +53,6 @@ set iminsert=0
 set imsearch=0
 set wildmode=longest,list,full
 set wildmenu
-nmap <leader>l :set list! relativenumber!<CR>
-nmap <leader>p :set list! number!<CR>
 
 set incsearch hlsearch smartcase
 set path=.,,**
@@ -60,7 +62,6 @@ set modeline nowrap
 set encoding=utf8
 set termencoding=utf8
 set laststatus=2
-set number
 set cursorline
 set hidden
 
@@ -69,101 +70,50 @@ set statusline+=%=%{fugitive#statusline()}\
 set statusline+=[%{strlen(&fenc)?&fenc:&enc}]
 set statusline+=\ [line\ %l\/%L]          
 
+command! -bang -nargs=* Pt call fzf#vim#grep('pt --nogroup --column --color '.shellescape(<q-args>), 0, <bang>0)
+
+" vim-go
+let g:go_def_mode = "godef"
+let g:go_fmt_command = "goimports"
+
+" completion
 let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
-
-" Go stuff
-
-" gofmt/imports
-let g:gofmt_command = "gofmt"
-let g:goimports_command = "goimports"
-
-if executable(g:goimports_command)
-	let g:gofmt_command = g:goimports_command
-endif
-
-function s:GoImports()
-    let view = winsaveview()
-    silent execute "%!" . g:gofmt_command
-    if v:shell_error
-        let errors = []
-        for line in getline(1, line('$'))
-            let tokens = matchlist(line, '^\(.\{-}\):\(\d\+\):\(\d\+\)\s*\(.*\)')
-            if !empty(tokens)
-                call add(errors, {"filename": @%,
-                                 \"lnum":     tokens[2],
-                                 \"col":      tokens[3],
-                                 \"text":     tokens[4]})
-            endif
-        endfor
-        if empty(errors)
-            % | " Couldn't detect gofmt error format, output errors
-        endif
-        undo
-        if !empty(errors)
-            call setqflist(errors, 'r')
-			copen
-			cc 1
-        endif
-	else
-		cclose
-    endif
-    call winrestview(view)
-endfunction
-
-autocmd FileType go autocmd BufWritePre <buffer> call s:GoImports()
-
-" godef
-let g:godef_command = "godef"
-
-function! Godef()
-    let pos = getpos(".")[1:2]
-    if &encoding == 'utf-8'
-        let offs = line2byte(pos[0]) + pos[1] - 2
-    else
-        let c = pos[1]
-        let buf = line('.') == 1 ? "" : (join(getline(1, pos[0] - 1), "\n") . "\n")
-        let buf .= c == 1 ? "" : getline(pos[0])[:c-2]
-        let offs = len(iconv(buf, &encoding, "utf-8"))
-    endif
-    let out=system(g:godef_command . " -f=" . expand("%:p") . " -i " . shellescape("-o=" . offs), join(getbufline(bufnr('%'), 1, '$'), "\n"))
-
-    let old_errorformat = &errorformat
-    let &errorformat = "%f:%l:%c"
-
-    if out =~ 'godef: '
-        let out=substitute(out, '\n$', '', '')
-        echom out
-	else
-        lexpr out
-    end
-    let &errorformat = old_errorformat
-endfunction
-
-autocmd FileType go nnoremap <buffer> gd :call Godef()<cr>
-
-" End Go stuff
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#sources#go#package_dot = 1
+set completeopt=menuone,noinsert,noselect
+autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
+autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 
 set colorcolumn=81
 set ttyfast
 set wildmenu
+imap jj <ESC>
 
 " Press space to clear search highlighting
-nnoremap <silent> <Space> :noh<CR>
+nnoremap <silent> <leader>n :noh<CR>
 nnoremap <NL> i<CR><ESC>
 nnoremap <C-p> :Files<CR>
-nnoremap <Space>/ :Ag 
+nnoremap <leader>/ :Pt 
 
 " Map toggling paste mode
 nnoremap <F2> :set invpaste paste?<CR>
 set pastetoggle=<F2>
 set invpaste
 set mouse=a
-
 nnoremap s :exec "normal i".nr2char(getchar())."\e"<CR>
 nnoremap S :exec "normal a".nr2char(getchar())."\e"<CR>
 nnoremap <F5> :set paste<CR>m`o<Esc>``:set nopaste<CR>
 nnoremap <F6> :set paste<CR>m`O<Esc>``:set nopaste<CR>
-nnoremap <F8> :TagbarToggle<CR>
+
+nnoremap <Leader>w :w<CR>
+
+vmap <Leader>y "*y
+nmap <Leader>yy "*yy
+vmap <Leader>d "*d
+nmap <Leader>p "*p
+nmap <Leader>P "*P
+vmap <Leader>p "*p
+vmap <Leader>P "*P
 
 "disable arrows
 inoremap  <Up>     <NOP>
@@ -174,9 +124,6 @@ noremap   <Up>     <NOP>
 noremap   <Down>   <NOP>
 noremap   <Left>   <NOP>
 noremap   <Right>  <NOP>
-
-autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
-autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 
 set background=dark
 let g:solarized_visibility = "high"
