@@ -32,7 +32,7 @@ tmp:
 	mkdir $(CWD)/tmp
 
 PACKAGES = golang.org/x/tools/cmd/goimports \
-	github.com/nsf/gocode \
+	github.com/mdempsky/gocode \
 	github.com/rogpeppe/godef \
 	github.com/LK4D4/gistit \
 	golang.org/x/tools/cmd/gorename \
