@@ -88,7 +88,6 @@ alias tmux="tmux -u2"
 alias wget="wget --continue --content-disposition"
 alias vim="nvim"
 alias grep="grep --colour"
-alias sift="sift --binary-skip --exclude-dirs=".git" -n"
 alias pt="GOGC=off pt"
 
 function zle-line-init () {
