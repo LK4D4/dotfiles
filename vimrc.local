@@ -70,16 +70,18 @@ set statusline+=%=%{fugitive#statusline()}\
 set statusline+=[%{strlen(&fenc)?&fenc:&enc}]
 set statusline+=\ [line\ %l\/%L]          
 
-command! -bang -nargs=* Pt call fzf#vim#grep('pt --nogroup --column --color '.shellescape(<q-args>), 0, <bang>0)
+command! -bang -nargs=* Pt call fzf#vim#grep('GOGC=off pt --smart-case --nogroup --column --color '.shellescape(<q-args>), 0, <bang>0)
 
 " vim-go
 let g:go_def_mode = "godef"
 let g:go_fmt_command = "goimports"
+nnoremap <Leader>b :GoBuild<CR>
 
 " completion
 let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#sources#go#package_dot = 1
+let g:deoplete#sources#go#gocode_sock = "none"
 set completeopt=menuone,noinsert,noselect
 autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
 autocmd InsertLeave * if pumvisible() == 0|pclose|endif
