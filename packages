@@ -1,6 +1,5 @@
-dwm
 dmenu
 conky
 tmux
-st
-vim
+neovim
+zsh
