@@ -2,13 +2,7 @@ CWD=$(shell pwd)
 BINDIR=$(HOME)/bin
 export GOPATH=$(CWD)/tmp
 
-all: vim tmux st dwm
-
-.IGNORE:
-docker:
-	docker build -t dev .
-
-dockerenv: vim zsh tmux
+all: vim zsh tmux st dwm
 
 vim: goinstall
 	ln -s $(CWD)/vimrc.local $(HOME)/.vimrc
