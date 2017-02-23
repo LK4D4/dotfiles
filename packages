@@ -19,3 +19,4 @@ www-client/google-chrome
 x11-apps/xsetroot
 x11-base/xorg-server
 x11-misc/dmenu
+x11-misc/slock
