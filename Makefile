@@ -1,11 +1,12 @@
 CWD=$(shell pwd)
 BINDIR=$(HOME)/bin
-export GOPATH=$(CWD)/tmp
 
 all: vim zsh tmux st dwm
 
 vim: goinstall
-	ln -s $(CWD)/vimrc.local $(HOME)/.vimrc
+	mkdir -p $(HOME)/.config/nvim
+	ln -s $(CWD)/vimrc $(HOME)/.vimrc
+	ln -s $(CWD)/vimrc $(HOME)/.config/nvim/init.vim
 
 zsh: dircolors
 	ln -s $(CWD)/zshrc $(HOME)/.zshrc
@@ -46,7 +47,7 @@ PACKAGES = golang.org/x/tools/cmd/goimports \
 	honnef.co/go/simple/cmd/gosimple
 
 
-goinstall: tmp
+goinstall:
 	$(foreach pkg,$(PACKAGES),go get -u $(pkg);)
 	$(foreach pkg,$(notdir $(PACKAGES)),rm -rf $(BINDIR)/$(pkg) && ln -s $(GOPATH)/bin/$(pkg) $(BINDIR)/$(pkg);)
 
