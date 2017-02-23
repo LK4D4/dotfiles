@@ -22,6 +22,10 @@ conky: skb
 	rm -rf $(HOME)/.conkyrc
 	ln -s $(CWD)/conkyrc $(HOME)/.conkyrc
 
+git: 
+	rm -rf $(HOME)/.gitconfig
+	ln -s $(CWD)/gitconfig $(HOME)/.gitconfig
+
 tmp:
 	mkdir $(CWD)/tmp
 
@@ -47,7 +51,7 @@ goinstall: tmp
 	$(foreach pkg,$(notdir $(PACKAGES)),rm -rf $(BINDIR)/$(pkg) && ln -s $(GOPATH)/bin/$(pkg) $(BINDIR)/$(pkg);)
 
 dircolors:
-	test -x $(HOME)/.dir_colors || ln -s $(CWD)/dircolors.256dark $(HOME)/.dir_colors
+	test -L $(HOME)/.dir_colors || ln -s $(CWD)/dircolors.256dark $(HOME)/.dir_colors
 
 st: terminfo tmp dircolors
 	rm -rf $(CWD)/tmp/st
@@ -70,7 +74,6 @@ dwm: tmp conky
 skb:
 	rm -rf $(CWD)/tmp/skb
 	git clone https://github.com/polachok/skb.git $(CWD)/tmp/skb
-	cp $(CWD)/skb/config.h $(CWD)/tmp/skb
 	cd $(CWD)/tmp/skb
 	$(MAKE) -C $(CWD)/tmp/skb
 	test -L $(HOME)/bin/skb || ln -s $(CWD)/tmp/skb/skb $(HOME)/bin/skb
