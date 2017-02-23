@@ -1,7 +1,7 @@
 # Sourcing so sourcing
 source /usr/bin/virtualenvwrapper.sh
 
-export GOROOT=$HOME/go
+export GOROOT=$HOME/project/go
 export GOARCH=amd64
 export GOOS=linux
 export PATH=$PATH:$GOROOT/bin
