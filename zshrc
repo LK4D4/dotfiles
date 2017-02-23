@@ -7,6 +7,7 @@ export GOOS=linux
 export PATH=$PATH:$GOROOT/bin
 export PATH=$PATH:$HOME/bin
 export GPG_TTY=$(tty)
+export LPASS_CLIPBOARD_COMMAND="xclip -selection primary -in -l 1"
 
 #Set LS_COLORS
 if [[ -f ~/.dir_colors ]]; then
