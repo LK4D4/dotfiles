@@ -12,4 +12,4 @@ conky.config = {
 };
 
 conky.text =
-[[RAM: $memperc% :: CPU Usage: $cpu% :: Bat: ${battery BAT0}/${battery BAT1}:: Vol: ${exec amixer get Master -M | awk '/^  Front Left/ {print $5}'} :: ${time %D %H:%M} :: [${exec skb 1}] ]];
+[[RAM: $memperc% :: CPU Usage: $cpu% :: Bat: ${battery BAT0} :: Vol: ${exec amixer get Master -M | awk '/^  Front Left/ {print $5}'} :: ${time %D %H:%M} :: [${exec skb 1}] ]];

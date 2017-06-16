@@ -82,7 +82,6 @@ static char termname[] = "screen-it";
  */
 static unsigned int tabspaces = 8;
 
-
 /* Terminal colors (16 first used in escape sequence) */
 static const char *colorname[] = {
 	/* 8 normal colors */
@@ -144,8 +143,6 @@ static unsigned int mousebg = 0;
  * complex.
  */
 static unsigned int defaultattr = 11;
-static unsigned int defaultitalic = 11;
-static unsigned int defaultunderline = 7;
 
 /*
  * Internal mouse shortcuts.
