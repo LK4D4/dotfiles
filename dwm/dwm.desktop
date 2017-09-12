@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Dwm
+Comment=Dynamic window manager
+Exec=/home/lk4d4/.xinitrc
+Icon=dwm
+Type=XSession
