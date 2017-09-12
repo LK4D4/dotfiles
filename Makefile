@@ -5,8 +5,8 @@ all: vim zsh tmux st dwm
 
 vim: goinstall
 	mkdir -p $(HOME)/.config/nvim
-	ln -s $(CWD)/vimrc $(HOME)/.vimrc
-	ln -s $(CWD)/vimrc $(HOME)/.config/nvim/init.vim
+	test -L $(HOME)/.vimrc || ln -s $(CWD)/vimrc $(HOME)/.vimrc
+	test -L $(HOME)/.config/nvim/init.vim || ln -s $(CWD)/vimrc $(HOME)/.config/nvim/init.vim
 
 zsh: dircolors
 	ln -s $(CWD)/zshrc $(HOME)/.zshrc
@@ -49,7 +49,7 @@ PACKAGES = golang.org/x/tools/cmd/goimports \
 
 goinstall:
 	$(foreach pkg,$(PACKAGES),go get -u $(pkg);)
-	$(foreach pkg,$(notdir $(PACKAGES)),rm -rf $(BINDIR)/$(pkg) && ln -s $(GOPATH)/bin/$(pkg) $(BINDIR)/$(pkg);)
+	$(foreach pkg,$(notdir $(PACKAGES)),rm -rf $(BINDIR)/$(pkg) && ln -s $(shell go env GOPATH)/bin/$(pkg) $(BINDIR)/$(pkg);)
 
 dircolors:
 	test -L $(HOME)/.dir_colors || ln -s $(CWD)/dircolors.256dark $(HOME)/.dir_colors
@@ -66,7 +66,7 @@ dwm: tmp conky
 	rm -rf $(CWD)/tmp/dwm
 	git clone http://git.suckless.org/dwm $(CWD)/tmp/dwm
 	cp $(CWD)/dwm/config.h $(CWD)/tmp/dwm
-	cd $(CWD)/tmp/dwm
+	cd $(CWD)/tmp/dwm && git apply --ignore-space-change --ignore-whitespace $(CWD)/dwm/dwm-systray.diff
 	$(MAKE) -C $(CWD)/tmp/dwm all
 	test -L $(HOME)/bin/dwm || ln -s $(CWD)/tmp/dwm/dwm $(HOME)/bin/dwm
 	test -L $(HOME)/.xserverrc || ln -s $(CWD)/xserverrc $(HOME)/.xserverrc
