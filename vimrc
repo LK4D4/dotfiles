@@ -101,6 +101,7 @@ nnoremap <silent> gd :LspDefinition<CR>
 
 " vim-go
 let g:go_fmt_command = "goimports"
+let g:go_def_mapping_enabled = 0
 
 " vim-rust
 let g:rustfmt_autosave = 1
