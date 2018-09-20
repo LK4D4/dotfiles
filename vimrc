@@ -1,12 +1,7 @@
-set nocompatible               " Be iMproved
+set nocompatible
 
-if has('nvim')
-	let s:plug_path = '~/.local/share/nvim/site/autoload/plug.vim'
-	let s:plug_dir = '~/.local/share/nvim/plugged'
-else
-	let s:plug_path = '~/.vim/autoload/plug.vim'
-	let s:plug_dir = '~/.vim/plugged'
-endif
+let s:plug_path = '~/.vim/autoload/plug.vim'
+let s:plug_dir = '~/.vim/plugged'
 
 if empty(glob(s:plug_path))
   silent execute '!curl -fLo '.s:plug_path.' --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
@@ -20,20 +15,21 @@ Plug 'altercation/vim-colors-solarized'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'easymotion/vim-easymotion'
-Plug 'ervandew/supertab'
 Plug 'scrooloose/nerdcommenter'
-function! DoRemote(arg)
-  UpdateRemotePlugins
-endfunction
-Plug 'Shougo/deoplete.nvim', { 'do': function('DoRemote') }
-Plug 'zchee/deoplete-go', { 'for': 'go', 'do': 'make' }
 
 Plug 'fatih/vim-go', { 'for': 'go' }
 Plug 'tpope/vim-markdown', { 'for': 'md' }
-Plug 'rust-lang/rust.vim'
+
+Plug 'prabirshrestha/async.vim'
+Plug 'prabirshrestha/vim-lsp'
+Plug 'ryanolsonx/vim-lsp-python'
+Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
 
 Plug 'tpope/vim-fugitive'
 Plug 'jplaut/vim-arduino-ino'
+
+set hidden
 
 call plug#end()
 
@@ -43,60 +39,83 @@ syntax on
 
 let mapleader = "\<Space>"
 
-nmap <Leader>s <Plug>(easymotion-overwin-f2)
-let g:EasyMotion_smartcase = 1
-map <Leader>j <Plug>(easymotion-j)
-map <Leader>k <Plug>(easymotion-k)
-
 set paste
+set incsearch hlsearch
 
-set noexpandtab shiftwidth=4 softtabstop=4 tabstop=4
 set nolist
 set listchars=tab:▹\ ,trail:▿
 
-"eol:↵,
 set keymap=russian-jcukenwin
 set iminsert=0
 set imsearch=0
 set wildmode=longest,list,full
 set wildmenu
-
-set incsearch hlsearch smartcase
-set path=.,,**
-set gdefault
-set showmatch
-set modeline nowrap
-set encoding=utf8
-set termencoding=utf8
-set laststatus=2
 set cursorline
-set hidden
+set laststatus=2
+imap jj <ESC>
+set noexpandtab shiftwidth=4 softtabstop=4 tabstop=4
+
 
 set statusline=%F%m%r%h%w\ 
 set statusline+=%=%{fugitive#statusline()}\    
 set statusline+=[%{strlen(&fenc)?&fenc:&enc}]
 set statusline+=\ [line\ %l\/%L]          
 
+" easymotion
+nmap <Leader>s <Plug>(easymotion-overwin-f2)
+let g:EasyMotion_smartcase = 1
+map <Leader>j <Plug>(easymotion-j)
+map <Leader>k <Plug>(easymotion-k)
+
+" fzf
 command! -bang -nargs=* Pt call fzf#vim#grep('GOGC=off pt --smart-case --nogroup --column --color '.shellescape(<q-args>), 0, <bang>0)
 
+" language client
+if executable('cquery')
+	   au User lsp_setup call lsp#register_server({
+	         \ 'name': 'cquery',
+	         \ 'cmd': {server_info->['cquery']},
+	         \ 'root_uri': {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'compile_commands.json'))},
+	         \ 'initialization_options': { 'cacheDirectory': '/path/to/cquery/cache' },
+	         \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp', 'cc'],
+	         \ })
+endif
+
+if executable('rls')
+	    au User lsp_setup call lsp#register_server({
+		        \ 'name': 'rls',
+		        \ 'cmd': {server_info->['rustup', 'run', 'nightly', 'rls']},
+		        \ 'whitelist': ['rust'],
+		        \ })
+endif
+
+if executable('go-langserver')
+	    au User lsp_setup call lsp#register_server({
+		        \ 'name': 'go-langserver',
+		        \ 'cmd': {server_info->['go-langserver', '-mode', 'stdio', '-gocodecompletion=true']},
+		        \ 'whitelist': ['go'],
+		        \ })
+endif
+
+nnoremap <silent> gd :LspDefinition<CR>
+
 " vim-go
-let g:go_def_mode = "godef"
 let g:go_fmt_command = "goimports"
-nnoremap <Leader>b :GoBuild<CR>
+
+" vim-rust
+let g:rustfmt_autosave = 1
 
 " completion
-let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#sources#go#package_dot = 1
-let g:deoplete#sources#go#gocode_sock = "none"
-set completeopt=menuone,noinsert,noselect
-autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
-autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+let g:asyncomplete_smart_completion = 1
+let g:asyncomplete_auto_popup = 1
+set completefunc=LanguageClient#complete
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
+imap <c-space> <Plug>(asyncomplete_force_refresh)
+autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
 
-set colorcolumn=81
-set ttyfast
-set wildmenu
-imap jj <ESC>
+set colorcolumn=120
 
 " Press space to clear search highlighting
 nnoremap <silent> <leader>n :noh<CR>
@@ -134,6 +153,9 @@ noremap   <Down>   <NOP>
 noremap   <Left>   <NOP>
 noremap   <Right>  <NOP>
 
-set background=dark
+set background="dark"
 let g:solarized_visibility = "high"
 colorscheme solarized
+
+let g:lsp_log_verbose = 1
+let g:lsp_log_file = expand('~/vim-lsp.log')

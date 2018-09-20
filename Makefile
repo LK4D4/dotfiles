@@ -33,18 +33,9 @@ tmp:
 PACKAGES = golang.org/x/tools/cmd/goimports \
 	github.com/mdempsky/gocode \
 	github.com/rogpeppe/godef \
-	github.com/LK4D4/gistit \
 	golang.org/x/tools/cmd/gorename \
 	github.com/monochromegane/the_platinum_searcher/cmd/pt \
-	github.com/josharian/impl \
-	golang.org/x/tools/cmd/guru \
-	github.com/gordonklaus/ineffassign \
-	github.com/golang/lint/golint \
-	github.com/kisielk/errcheck \
-	github.com/mdempsky/unconvert \
-	honnef.co/go/staticcheck/cmd/staticcheck \
-	honnef.co/go/unused/cmd/unused \
-	honnef.co/go/simple/cmd/gosimple
+	golang.org/x/tools/cmd/guru
 
 
 goinstall:
@@ -59,6 +50,7 @@ st: terminfo tmp dircolors
 	git clone http://git.suckless.org/st $(CWD)/tmp/st
 	cp $(CWD)/st/config.h $(CWD)/tmp/st
 	cd $(CWD)/tmp/st && git apply --ignore-space-change --ignore-whitespace $(CWD)/st/no_bold.patch
+	cd $(CWD)/tmp/st && git apply --ignore-space-change --ignore-whitespace $(CWD)/st/extpipe.patch
 	$(MAKE) -C $(CWD)/tmp/st all
 	test -L $(HOME)/bin/st || ln -s $(CWD)/tmp/st/st $(HOME)/bin/st
 

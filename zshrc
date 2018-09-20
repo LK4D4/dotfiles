@@ -1,10 +1,5 @@
-# Sourcing so sourcing
-source /usr/bin/virtualenvwrapper.sh
-
-export GOROOT=$HOME/project/go
 export GOARCH=amd64
 export GOOS=linux
-export PATH=$PATH:$GOROOT/bin
 export PATH=$PATH:$HOME/bin
 export GPG_TTY=$(tty)
 export LPASS_CLIPBOARD_COMMAND="xclip -selection primary -in -l 1"
