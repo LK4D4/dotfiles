@@ -3,10 +3,22 @@ BINDIR=$(HOME)/bin
 
 all: vim zsh tmux st dwm
 
-vim: goinstall
+vim: goinstall rls
 	mkdir -p $(HOME)/.config/nvim
 	test -L $(HOME)/.vimrc || ln -s $(CWD)/vimrc $(HOME)/.vimrc
 	test -L $(HOME)/.config/nvim/init.vim || ln -s $(CWD)/vimrc $(HOME)/.config/nvim/init.vim
+
+rg:
+	rm -rf $(CWD)/tmp/ripgrep
+	git clone https://github.com/BurntSushi/ripgrep $(CWD)/tmp/ripgrep
+	cd $(CWD)/tmp/ripgrep && cargo build --release
+	test -L $(HOME)/bin/rg || ln -s $(CWD)/tmp/ripgrep/target/release/rg $(HOME)/bin/rg
+
+rls:
+	rustup component add rls-preview rust-analysis rust-src
+
+rust:
+	curl https://sh.rustup.rs -sSf | sh
 
 zsh: dircolors
 	ln -s $(CWD)/zshrc $(HOME)/.zshrc
@@ -34,7 +46,7 @@ PACKAGES = golang.org/x/tools/cmd/goimports \
 	github.com/mdempsky/gocode \
 	github.com/rogpeppe/godef \
 	golang.org/x/tools/cmd/gorename \
-	github.com/monochromegane/the_platinum_searcher/cmd/pt \
+	github.com/google/pprof \
 	golang.org/x/tools/cmd/guru
 
 

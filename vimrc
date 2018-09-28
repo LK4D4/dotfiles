@@ -56,10 +56,10 @@ imap jj <ESC>
 set noexpandtab shiftwidth=4 softtabstop=4 tabstop=4
 
 
-set statusline=%F%m%r%h%w\ 
-set statusline+=%=%{fugitive#statusline()}\    
+set statusline=%F%m%r%h%w\
+set statusline+=%=%{fugitive#statusline()}\
 set statusline+=[%{strlen(&fenc)?&fenc:&enc}]
-set statusline+=\ [line\ %l\/%L]          
+set statusline+=\ [line\ %l\/%L]
 
 " easymotion
 nmap <Leader>s <Plug>(easymotion-overwin-f2)
@@ -68,33 +68,33 @@ map <Leader>j <Plug>(easymotion-j)
 map <Leader>k <Plug>(easymotion-k)
 
 " fzf
-command! -bang -nargs=* Pt call fzf#vim#grep('GOGC=off pt --smart-case --nogroup --column --color '.shellescape(<q-args>), 0, <bang>0)
+command! -bang -nargs=* Rg call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>), 0, <bang>0)
 
 " language client
 if executable('cquery')
-	   au User lsp_setup call lsp#register_server({
-	         \ 'name': 'cquery',
-	         \ 'cmd': {server_info->['cquery']},
-	         \ 'root_uri': {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'compile_commands.json'))},
-	         \ 'initialization_options': { 'cacheDirectory': '/path/to/cquery/cache' },
-	         \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp', 'cc'],
-	         \ })
+		au User lsp_setup call lsp#register_server({
+				 \ 'name': 'cquery',
+				 \ 'cmd': {server_info->['cquery']},
+				 \ 'root_uri': {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'compile_commands.json'))},
+				 \ 'initialization_options': { 'cacheDirectory': '/path/to/cquery/cache' },
+				 \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp', 'cc'],
+				 \ })
 endif
 
 if executable('rls')
-	    au User lsp_setup call lsp#register_server({
-		        \ 'name': 'rls',
-		        \ 'cmd': {server_info->['rustup', 'run', 'nightly', 'rls']},
-		        \ 'whitelist': ['rust'],
-		        \ })
+		au User lsp_setup call lsp#register_server({
+				\ 'name': 'rls',
+				\ 'cmd': {server_info->['rustup', 'run', 'nightly', 'rls']},
+				\ 'whitelist': ['rust'],
+				\ })
 endif
 
 if executable('go-langserver')
-	    au User lsp_setup call lsp#register_server({
-		        \ 'name': 'go-langserver',
-		        \ 'cmd': {server_info->['go-langserver', '-mode', 'stdio', '-gocodecompletion=true']},
-		        \ 'whitelist': ['go'],
-		        \ })
+		au User lsp_setup call lsp#register_server({
+				\ 'name': 'go-langserver',
+				\ 'cmd': {server_info->['go-langserver', '-mode', 'stdio', '-gocodecompletion=true']},
+				\ 'whitelist': ['go'],
+				\ })
 endif
 
 nnoremap <silent> gd :LspDefinition<CR>
@@ -109,7 +109,6 @@ let g:rustfmt_autosave = 1
 " completion
 let g:asyncomplete_smart_completion = 1
 let g:asyncomplete_auto_popup = 1
-set completefunc=LanguageClient#complete
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
@@ -122,7 +121,7 @@ set colorcolumn=120
 nnoremap <silent> <leader>n :noh<CR>
 nnoremap <NL> i<CR><ESC>
 nnoremap <C-p> :Files<CR>
-nnoremap <leader>/ :Pt 
+nnoremap <leader>/ :Rg
 
 " Map toggling paste mode
 nnoremap <F2> :set invpaste paste?<CR>
