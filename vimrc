@@ -17,7 +17,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'easymotion/vim-easymotion'
 Plug 'scrooloose/nerdcommenter'
 
-Plug 'fatih/vim-go', { 'for': 'go' }
+Plug 'fatih/vim-go', {'for': 'go'}
 Plug 'tpope/vim-markdown', { 'for': 'md' }
 
 Plug 'prabirshrestha/async.vim'
@@ -92,12 +92,18 @@ endif
 if executable('go-langserver')
 		au User lsp_setup call lsp#register_server({
 				\ 'name': 'go-langserver',
-				\ 'cmd': {server_info->['go-langserver', '-mode', 'stdio', '-gocodecompletion=true']},
+				\ 'cmd': {server_info->['go-langserver', '-mode', 'stdio', '-gocodecompletion=true', '-diagnostics=true']},
 				\ 'whitelist': ['go'],
 				\ })
 endif
 
 nnoremap <silent> gd :LspDefinition<CR>
+
+let g:lsp_preview_keep_focus=0
+let g:lsp_signs_enabled=1
+let g:lsp_diagnostics_echo_cursor=1
+let g:lsp_signs_error={'text': '✗'}
+let g:lsp_signs_warning={'text': '➤' }
 
 " vim-go
 let g:go_fmt_command = "goimports"
@@ -121,7 +127,7 @@ set colorcolumn=120
 nnoremap <silent> <leader>n :noh<CR>
 nnoremap <NL> i<CR><ESC>
 nnoremap <C-p> :Files<CR>
-nnoremap <leader>/ :Rg
+nnoremap <leader>/ :Rg 
 
 " Map toggling paste mode
 nnoremap <F2> :set invpaste paste?<CR>

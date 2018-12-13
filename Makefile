@@ -47,7 +47,8 @@ PACKAGES = golang.org/x/tools/cmd/goimports \
 	github.com/rogpeppe/godef \
 	golang.org/x/tools/cmd/gorename \
 	github.com/google/pprof \
-	golang.org/x/tools/cmd/guru
+	golang.org/x/tools/cmd/guru \
+	github.com/sourcegraph/go-langserver
 
 
 goinstall:
