@@ -56,8 +56,8 @@ imap jj <ESC>
 set noexpandtab shiftwidth=4 softtabstop=4 tabstop=4
 
 
-set statusline=%F%m%r%h%w\
-set statusline+=%=%{fugitive#statusline()}\
+set statusline=%F%m%r%h%w
+set statusline+=%=%{fugitive#statusline()}
 set statusline+=[%{strlen(&fenc)?&fenc:&enc}]
 set statusline+=\ [line\ %l\/%L]
 
@@ -95,6 +95,14 @@ if executable('go-langserver')
 				\ 'cmd': {server_info->['go-langserver', '-mode', 'stdio', '-gocodecompletion=true', '-diagnostics=true']},
 				\ 'whitelist': ['go'],
 				\ })
+endif
+
+if executable('pyls')
+	    au User lsp_setup call lsp#register_server({
+		        \ 'name': 'pyls',
+		        \ 'cmd': {server_info->['pyls']},
+		        \ 'whitelist': ['python'],
+		        \ })
 endif
 
 nnoremap <silent> gd :LspDefinition<CR>
