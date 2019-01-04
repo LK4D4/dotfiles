@@ -89,10 +89,10 @@ if executable('rls')
 				\ })
 endif
 
-if executable('go-langserver')
+if executable('bingo')
 		au User lsp_setup call lsp#register_server({
-				\ 'name': 'go-langserver',
-				\ 'cmd': {server_info->['go-langserver', '-mode', 'stdio', '-gocodecompletion=true', '-diagnostics=true']},
+				\ 'name': 'bingo',
+				\ 'cmd': {server_info->['bingo', '--mode', 'stdio', '--logfile', '/tmp/lspserver.log','--trace', '--pprof', ':6060']},
 				\ 'whitelist': ['go'],
 				\ })
 endif
