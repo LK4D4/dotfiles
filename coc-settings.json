@@ -1,0 +1,18 @@
+{
+
+	"languageserver": {
+		"golang": {
+		"command": "gopls",
+		"rootPatterns": [".git", "go.mod"],
+		"filetypes": ["go"],
+			"initializationOptions": {
+				"staticcheck": true
+			}
+		}
+	},
+	"python.formatting.provider": "black",
+	"python.formatting.blackPath": "/home/lk4d4/.local/bin/black",
+	"python.linting.mypyPath": "/home/lk4d4/src/server/mypy/mypy-daemon-all",
+	"python.linting.mypyEnabled": true,
+	"coc.preferences.formatOnSaveFiletypes": ["python", "go"],
+}

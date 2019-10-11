@@ -10,24 +10,21 @@ endif
 
 call plug#begin(s:plug_dir)
 
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
 Plug 'altercation/vim-colors-solarized'
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+Plug 'tweekmonster/fzf-filemru'
 Plug 'easymotion/vim-easymotion'
 Plug 'scrooloose/nerdcommenter'
 
-Plug 'fatih/vim-go', {'for': 'go'}
 Plug 'tpope/vim-markdown', { 'for': 'md' }
-
-Plug 'prabirshrestha/async.vim'
-Plug 'prabirshrestha/vim-lsp'
-Plug 'ryanolsonx/vim-lsp-python'
-Plug 'prabirshrestha/asyncomplete.vim'
-Plug 'prabirshrestha/asyncomplete-lsp.vim'
 
 Plug 'tpope/vim-fugitive'
 Plug 'jplaut/vim-arduino-ino'
+Plug 'fcpg/vim-osc52'
 
 set hidden
 
@@ -55,6 +52,23 @@ set laststatus=2
 imap jj <ESC>
 set noexpandtab shiftwidth=4 softtabstop=4 tabstop=4
 
+set updatetime=300
+set shortmess+=c
+set signcolumn=yes
+
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+
+function! s:check_back_space() abort
+	let col = col('.') - 1
+	return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+xmap <C-c> y:call SendViaOSC52(getreg('"'))<cr>
 
 set statusline=%F%m%r%h%w
 set statusline+=%=%{fugitive#statusline()}
@@ -67,74 +81,22 @@ let g:EasyMotion_smartcase = 1
 map <Leader>j <Plug>(easymotion-j)
 map <Leader>k <Plug>(easymotion-k)
 
-" fzf
-command! -bang -nargs=* Rg call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>), 0, <bang>0)
+autocmd BufWritePre *.go :CocCommand editor.action.organizeImport
+nmap <silent> [c <Plug>(coc-diagnostic-prev)
+nmap <silent> ]c <Plug>(coc-diagnostic-next)
 
-" language client
-if executable('cquery')
-		au User lsp_setup call lsp#register_server({
-				 \ 'name': 'cquery',
-				 \ 'cmd': {server_info->['cquery']},
-				 \ 'root_uri': {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'compile_commands.json'))},
-				 \ 'initialization_options': { 'cacheDirectory': '/path/to/cquery/cache' },
-				 \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp', 'cc'],
-				 \ })
-endif
-
-if executable('rls')
-		au User lsp_setup call lsp#register_server({
-				\ 'name': 'rls',
-				\ 'cmd': {server_info->['rustup', 'run', 'nightly', 'rls']},
-				\ 'whitelist': ['rust'],
-				\ })
-endif
-
-if executable('bingo')
-		au User lsp_setup call lsp#register_server({
-				\ 'name': 'bingo',
-				\ 'cmd': {server_info->['bingo', '--mode', 'stdio', '--logfile', '/tmp/lspserver.log','--trace', '--pprof', ':6060']},
-				\ 'whitelist': ['go'],
-				\ })
-endif
-
-if executable('pyls')
-	    au User lsp_setup call lsp#register_server({
-		        \ 'name': 'pyls',
-		        \ 'cmd': {server_info->['pyls']},
-		        \ 'whitelist': ['python'],
-		        \ })
-endif
-
-nnoremap <silent> gd :LspDefinition<CR>
-
-let g:lsp_preview_keep_focus=0
-let g:lsp_signs_enabled=1
-let g:lsp_diagnostics_echo_cursor=1
-let g:lsp_signs_error={'text': '✗'}
-let g:lsp_signs_warning={'text': '➤' }
-
-" vim-go
-let g:go_fmt_command = "goimports"
-let g:go_def_mapping_enabled = 0
-
-" vim-rust
-let g:rustfmt_autosave = 1
-
-" completion
-let g:asyncomplete_smart_completion = 1
-let g:asyncomplete_auto_popup = 1
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
-imap <c-space> <Plug>(asyncomplete_force_refresh)
-autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+nmap <leader>rn <Plug>(coc-rename)
 
 set colorcolumn=120
 
 " Press space to clear search highlighting
 nnoremap <silent> <leader>n :noh<CR>
 nnoremap <NL> i<CR><ESC>
-nnoremap <C-p> :Files<CR>
+nnoremap <C-p> :FilesMru --tiebreak=end<CR>
 nnoremap <leader>/ :Rg 
 
 " Map toggling paste mode
@@ -170,6 +132,3 @@ noremap   <Right>  <NOP>
 set background="dark"
 let g:solarized_visibility = "high"
 colorscheme solarized
-
-let g:lsp_log_verbose = 1
-let g:lsp_log_file = expand('~/vim-lsp.log')
